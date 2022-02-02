@@ -1,0 +1,38 @@
+
+- name: Add user zeNkan
+  user:
+    name: zenkan
+    shell: /bin/bash
+    groups: wheel
+    append: yes
+    password: "!"
+  become: yes
+
+- name: Install Git
+  package:
+    name: git
+    state: present
+  become: yes
+  debugger: on_failed
+
+- name: slurp
+  slurp:
+    src: "{{ role_path }}/files/id_ed25519.pub"
+  register: pub_key
+
+- name: Install authorized keys
+  ansible.posix.authorized_key:
+    user: zenkan
+    state: present
+    manage_dir: yes
+    key: "{{ pub_key.content | b64decode }}"
+  become: yes
+
+- name: Validate the sudoers file before saving
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel ALL='
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: /usr/sbin/visudo -cf %s
+  become: yes

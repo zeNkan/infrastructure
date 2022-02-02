@@ -1,0 +1,1 @@
+ssh_pub_key: "{{ lookup('env', 'HOME') }}/.config/ssh/id_ed25519.pub"

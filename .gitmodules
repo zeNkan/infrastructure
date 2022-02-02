@@ -1,0 +1,3 @@
+[submodule "submodules/lanbros-minecraft"]
+	path = submodules/lanbros-minecraft
+	url = git@github.com:zeNkan/lanbros-minecraft.git
