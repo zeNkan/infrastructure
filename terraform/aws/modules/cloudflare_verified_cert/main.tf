@@ -27,7 +27,6 @@ resource "cloudflare_record" "cert_verification" {
   type            = each.value.type
   ttl             = 1
   proxied         = false
-  allow_overwrite = true
 }
 
 resource "aws_acm_certificate_validation" "CF_verified" {

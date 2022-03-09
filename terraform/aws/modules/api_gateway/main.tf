@@ -66,7 +66,7 @@ resource "aws_lambda_permission" "api_gw" {
 }
 
 resource "aws_apigatewayv2_domain_name" "example" {
-  domain_name = "ms.backman.fyi"
+  domain_name = "${var.hostname}.${var.domain_name}"
 
   domain_name_configuration {
     certificate_arn = var.cert_arn
