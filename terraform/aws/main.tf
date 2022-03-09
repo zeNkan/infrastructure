@@ -99,13 +99,14 @@ module "minecraft-status" {
 module "cloudflare_cert" { 
   source = "./modules/cloudflare_verified_cert/"
 
-  hostname = "ms"
+  hostname = "minecraft-status"
   domain_name = "backman.fyi"
 }
 
 module "api_gateway" {
   source = "./modules/api_gateway/"
-  hostname = "ms"
+  hostname = "minecraft-status"
+  domain_name = "backman.fyi"
   lambda_name = module.minecraft-status.lambda_name
   lambda_arn = module.minecraft-status.lambda_arn
   zone_name = "backman.fyi"

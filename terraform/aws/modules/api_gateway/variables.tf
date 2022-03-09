@@ -8,6 +8,11 @@ variable "lambda_arn" {
   type  = string
 }
 
+variable "domain_name" {
+  description = "The domain name of the published app"
+  type  = string
+}
+
 variable "hostname" {
   description = "The hostname of the published app"
   type  = string
