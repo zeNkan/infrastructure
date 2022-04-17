@@ -6,6 +6,19 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
+# Set up domain
+resource "cloudflare_zone" "root_zone" {
+  zone = "backman.fyi"
+}
+
+module "protonmail" {
+  source = "./modules/protonmail/"
+  cloudflare_zone_id = cloudflare_zone.root_zone.id
+
+  spf_record = var.proton_spf
+  dkim_record = var.proton_dkim
+}
+
 # Define the main VPC
 resource "aws_vpc" "main_vpc" {
   cidr_block = var.packer_build_vpc_cidr
@@ -113,25 +126,25 @@ module "api_gateway" {
   cert_arn = module.cloudflare_cert.arn
 }
 
-resource "aws_route53_zone" "public" {
-  name = "cloud.backman.fyi"
-}
+#resource "aws_route53_zone" "public" {
+#  name = "cloud.backman.fyi"
+#}
+#
+#resource "aws_ses_domain_identity" "test_identity" {
+#  domain = "test@cloud.backman.fyi"
+#}
+#
+#resource "aws_route53_record" "example_amazonses_verification_record" {
+#  zone_id = aws_route53_zone.public.zone_id
+#  name    = "_amazonses.${aws_ses_domain_identity.test_identity.id}"
+#  type    = "TXT"
+#  ttl     = "600"
+#  records = [aws_ses_domain_identity.test_identity.verification_token]
+#}
 
-resource "aws_ses_domain_identity" "test_identity" {
-  domain = "test@cloud.backman.fyi"
-}
-
-resource "aws_route53_record" "example_amazonses_verification_record" {
-  zone_id = aws_route53_zone.public.zone_id
-  name    = "_amazonses.${aws_ses_domain_identity.test_identity.id}"
-  type    = "TXT"
-  ttl     = "600"
-  records = [aws_ses_domain_identity.test_identity.verification_token]
-}
-
-resource "aws_ses_domain_identity_verification" "example_verification" {
-  domain = aws_ses_domain_identity.example.id
-
-  depends_on = [aws_route53_record.example_amazonses_verification_record]
-}
+#resource "aws_ses_domain_identity_verification" "example_verification" {
+#  domain = aws_ses_domain_identity.example.id
+#
+#  depends_on = [aws_route53_record.example_amazonses_verification_record]
+#}
 
