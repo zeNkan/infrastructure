@@ -22,12 +22,12 @@ module "protonmail" {
 module "vpc" {
   source = "./modules/vpc"
 
-  region               = "eu-north-1"
-  vpc_cidr_range             = "10.10.0.0/16"
-  vpc_name                 = "main-vpc"
-  pub_subnets  = ["10.10.0.0/24", "10.10.1.0/24", "10.10.2.0/24"]
-  priv_subnets = ["10.10.3.0/24", "10.10.4.0/24", "10.10.5.0/24"]
-  availability_zones   = ["eu-north-1a", "eu-north-1b", "eu-north-1c"]
+  region             = var.aws_region
+  vpc_cidr_range     = var.vpc_cider_range
+  vpc_name           = "main-vpc"
+  pub_subnets        = var.public_subnets
+  priv_subnets       = var.private_subnets
+  availability_zones = var.availability_zones
 }
 
 module "minecraft-backup" {
