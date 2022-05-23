@@ -2,7 +2,7 @@ provider "aws" {
   region = var.region
 }
 
-resource "aws_vpc" "main_vpc" {
+resource "aws_vpc" "vpc" {
   cidr_block       = var.vpc_cidr_range
   instance_tenancy = "default"
 
@@ -15,8 +15,8 @@ resource "aws_vpc" "main_vpc" {
 resource "aws_security_group" "default" {
   name        = "${var.vpc_name}-default-sg"
   description = "Default security group to allow inbound/outbound from the VPC"
-  vpc_id      = aws_vpc.main_vpc.id
-  depends_on  = [aws_vpc.main_vpc]
+  vpc_id      = aws_vpc.vpc.id
+  depends_on  = [aws_vpc.vpc]
 
   ingress {
     from_port = "0"
@@ -35,7 +35,7 @@ resource "aws_security_group" "default" {
 
 ## PRIVATE SUBNETS
 resource "aws_subnet" "private" {
-  vpc_id                  = aws_vpc.main_vpc.id
+  vpc_id                  = aws_vpc.vpc.id
   count                   = length(var.priv_subnets)
   cidr_block              = element(var.priv_subnets, count.index)
   availability_zone       = element(var.availability_zones, count.index)
@@ -63,7 +63,7 @@ resource "aws_eip" "nat_eip" {
 
 # Private subnets route table
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "${var.vpc_name}-private-route-table"
@@ -85,7 +85,7 @@ resource "aws_route_table_association" "private" {
 
 ## PUBLIC SUBNETS
 resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.main_vpc.id
+  vpc_id                  = aws_vpc.vpc.id
   count                   = length(var.pub_subnets)
   cidr_block              = element(var.pub_subnets, count.index)
   availability_zone       = element(var.availability_zones, count.index)
@@ -98,7 +98,7 @@ resource "aws_subnet" "public" {
 
 # Create the main internet gateway
 resource "aws_internet_gateway" "main_igw" {
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "${var.vpc_name}-igw"
@@ -107,7 +107,7 @@ resource "aws_internet_gateway" "main_igw" {
 
 # Public subnets route table
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "${var.vpc_name}-public-route-table"
