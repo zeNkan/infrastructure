@@ -59,4 +59,11 @@ resource "aws_lambda_function" "minecraft-status" {
   timeout = 300
   image_uri = "${data.aws_ecr_repository.repo.repository_url}@${data.aws_ecr_image.lambda_image.id}"
   package_type = "Image"
+
+  environment {
+    variables = {
+      MC_SERVER_ADDR = "mc.backman.fyi"
+      MC_SERVER_PORT = "25565"
+    }
+ }
 }
