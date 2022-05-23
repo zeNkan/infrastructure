@@ -4,6 +4,21 @@ variable "aws_region" {
   type        = string
 }
 
+variable "vpc_cider_range" {
+  type = string
+}
+variable "availability_zones" {
+  type = list(string)
+}
+
+variable "public_subnets" {
+  type = list(string)
+}
+
+variable "private_subnets" {
+  type = list(string)
+}
+
 # PROTON MAIL
 variable "proton_spf" {
   description = "Protonmail SPF record"
