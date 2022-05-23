@@ -7,12 +7,12 @@ variable "aws_region" {
 # PROTON MAIL
 variable "proton_spf" {
   description = "Protonmail SPF record"
-  type = string
+  type        = string
 }
 
 variable "proton_dkim" {
   description = "Protonmail DKIM record"
-  type = string
+  type        = string
 }
 # Packer VPC
 variable "packer_build_env" {
