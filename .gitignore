@@ -1,3 +1,6 @@
+# Ignore .idea
+.idea
+
 # Local .terraform directories
 **/.terraform/*
 
