@@ -1,21 +1,26 @@
-# General settings
+# AWS
 variable "aws_region" {
   description = "AWS Region"
   type        = string
 }
 
-variable "vpc_cider_range" {
+variable "aws_vpc_name" {
+  description = "Name of AWS root VPC"
   type = string
 }
-variable "availability_zones" {
+
+variable "aws_vpc_cidr_range" {
+  type = string
+}
+variable "aws_availability_zones" {
   type = list(string)
 }
 
-variable "public_subnets" {
+variable "aws_public_subnets" {
   type = list(string)
 }
 
-variable "private_subnets" {
+variable "aws_private_subnets" {
   type = list(string)
 }
 
@@ -29,18 +34,27 @@ variable "proton_dkim" {
   description = "Protonmail DKIM record"
   type        = string
 }
-# Packer VPC
-variable "packer_build_env" {
-  description = "Base name for the packer build environment"
-  type        = string
-}
-variable "packer_build_vpc_cidr" {
-  description = "Packer build VPC cidr range"
-  type        = string
-}
 
 
+# CLOUDFLARE
 variable "cloudflare_api_token" {
   description = "Cloudflare API token"
   type        = string
+}
+
+variable "cloudflare_dns_zone" {
+  description = "DNS zone to be registered in Cloudflare"
+  type        = string
+}
+
+# MC BACKUP
+variable "mc_backup_username" {
+  description = "MC Backup AWS IAM User"
+  type = string
+}
+
+# MINECRAFT-STATUS
+variable "mc_status_name" {
+  description = "Minecraft Status ECR Repository name"
+  type = string
 }
