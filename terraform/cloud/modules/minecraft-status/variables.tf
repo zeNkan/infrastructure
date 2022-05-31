@@ -3,13 +3,17 @@ variable "image_tag" {
   description = "The tage of the image to use"
 }
 
-
-variable "ecr_repo_name" {
+variable "function_name" {
   type = string
   description = "The name of the ECR repository name"
 }
 
-variable "prefix" {
+variable "mc_server_hostname" {
   type = string
-  description = "Resource prefix name"
+  description = "The name of the ECR repository name"
+}
+
+variable "mc_server_port" {
+  type = string
+  description = "The name of the ECR repository name"
 }

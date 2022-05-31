@@ -1,5 +1,5 @@
 data "aws_ecr_repository" "repo" {
-  name = var.ecr_repo_name
+  name = var.function_name
 }
 
 
@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "lambda_assume_policy" {
 
 
 resource "aws_iam_role" "lambda" {
-  name = "${var.prefix}-lambda-role"
+  name = "${var.function_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_policy.json
 }
 
@@ -47,14 +47,14 @@ data "aws_iam_policy_document" "lambda" {
 
 
 resource "aws_iam_policy" "lambda-iam-policy" {
-  name = "${var.prefix}-lambda-policy"
+  name = "${var.function_name}-lambda-policy"
   path = "/"
   policy = data.aws_iam_policy_document.lambda.json
 }
 
 
 resource "aws_lambda_function" "minecraft-status" {
-  function_name = "${var.prefix}-lambda"
+  function_name = "${var.function_name}-lambda"
   role = aws_iam_role.lambda.arn
   timeout = 300
   image_uri = "${data.aws_ecr_repository.repo.repository_url}@${data.aws_ecr_image.lambda_image.id}"
@@ -62,8 +62,8 @@ resource "aws_lambda_function" "minecraft-status" {
 
   environment {
     variables = {
-      MC_SERVER_ADDR = "mc.backman.fyi"
-      MC_SERVER_PORT = "25565"
+      MC_SERVER_ADDR = var.mc_server_hostname
+      MC_SERVER_PORT = var.mc_server_port
     }
  }
 }
