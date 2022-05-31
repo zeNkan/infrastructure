@@ -6,7 +6,7 @@ variable "aws_region" {
 
 variable "aws_vpc_name" {
   description = "Name of AWS root VPC"
-  type = string
+  type        = string
 }
 
 variable "aws_vpc_cidr_range" {
@@ -50,11 +50,21 @@ variable "cloudflare_dns_zone" {
 # MC BACKUP
 variable "mc_backup_username" {
   description = "MC Backup AWS IAM User"
-  type = string
+  type        = string
 }
 
 # MINECRAFT-STATUS
-variable "mc_status_name" {
-  description = "Minecraft Status ECR Repository name"
-  type = string
+variable "mc_status_function_name" {
+  description = "Minecraft Status Function Name"
+  type        = string
+}
+
+variable "mc_status_server_hostname" {
+  description = "MC Server Hostname"
+  type        = string
+}
+# MINECRAFT-STATUS
+variable "mc_status_server_port" {
+  description = "MC Server Port"
+  type        = string
 }

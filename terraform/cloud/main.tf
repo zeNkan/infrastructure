@@ -11,14 +11,6 @@ resource "cloudflare_zone" "root_zone" {
   zone = var.cloudflare_dns_zone
 }
 
-module "protonmail" {
-  source = "./modules/protonmail/"
-
-  cloudflare_zone_id = cloudflare_zone.root_zone.id
-  spf_record         = var.proton_spf
-  dkim_record        = var.proton_dkim
-}
-
 module "vpc" {
   source = "./modules/vpc"
 
@@ -39,24 +31,33 @@ module "minecraft-backup" {
 module "minecraft-status" {
   source = "./modules/minecraft-status/"
 
-  ecr_repo_name = var.mc_status_name
-  prefix        = var.mc_status_name
-  image_tag     = "latest"
+  function_name      = var.mc_status_function_name
+  image_tag          = "latest"
+  mc_server_hostname = var.mc_status_server_hostname
+  mc_server_port     = var.mc_status_server_port
 }
 
 module "cloudflare_cert" {
   source = "./modules/cloudflare_verified_cert/"
 
-  hostname    = var.mc_status_name
+  hostname    = var.mc_status_function_name
   domain_name = var.cloudflare_dns_zone
 }
 
 module "api_gateway" {
   source      = "./modules/api_gateway/"
-  hostname    = var.mc_status_name
+  hostname    = var.mc_status_function_name
   domain_name = var.cloudflare_dns_zone
   lambda_name = module.minecraft-status.lambda_name
   lambda_arn  = module.minecraft-status.lambda_arn
   zone_name   = var.cloudflare_dns_zone
   cert_arn    = module.cloudflare_cert.arn
+}
+
+module "protonmail" {
+  source = "./modules/protonmail/"
+
+  cloudflare_zone_id = cloudflare_zone.root_zone.id
+  spf_record         = var.proton_spf
+  dkim_record        = var.proton_dkim
 }
