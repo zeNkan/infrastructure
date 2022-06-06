@@ -22,6 +22,13 @@ module "vpc" {
   availability_zones = var.aws_availability_zones
 }
 
+module "sns" {
+  source = "./modules/sns/"
+
+  sns_topic_name         = "default-alerts"
+  sns_subscription_email = "aws@${var.cloudflare_dns_zone}"
+}
+
 module "minecraft-backup" {
   source = "./modules/minecraft-backup/"
 
