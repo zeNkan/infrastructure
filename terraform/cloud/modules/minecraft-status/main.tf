@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "lambda_assume_policy" {
     principals {
       type = "Service"
       identifiers = ["lambda.amazonaws.com"]
-    } 
+    }
   }
 }
 
@@ -26,30 +26,9 @@ resource "aws_iam_role" "lambda" {
 }
 
 
-resource "aws_cloudwatch_log_group" "minecraft-status" {
-  name = "/aws/lambda/${aws_lambda_function.minecraft-status.function_name}"
-  retention_in_days = 14
-}
-
-
-data "aws_iam_policy_document" "lambda" {
-  statement {
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
-    effect = "Allow"
-    resources = [ "*" ]
-    sid = "CreateCloudWatchLogs"
-  }
-}
-
-
-resource "aws_iam_policy" "lambda-iam-policy" {
-  name = "${var.function_name}-lambda-policy"
-  path = "/"
-  policy = data.aws_iam_policy_document.lambda.json
+resource "aws_iam_role_policy_attachment" "lambda_cloudwatd_policy_attachment" {
+  role   = aws_iam_role.lambda.id
+  policy_arn = var.lambda_policy_arn
 }
 
 
