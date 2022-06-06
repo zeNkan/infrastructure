@@ -57,7 +57,9 @@ module "api_gateway" {
 module "protonmail" {
   source = "./modules/protonmail/"
 
+  domain_name        = var.cloudflare_dns_zone
   cloudflare_zone_id = cloudflare_zone.root_zone.id
-  spf_record         = var.proton_spf
-  dkim_record        = var.proton_dkim
+  proton_records     = var.proton_records
+
+  depends_on = [cloudflare_zone.root_zone]
 }
