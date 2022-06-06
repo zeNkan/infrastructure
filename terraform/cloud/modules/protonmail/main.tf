@@ -1,29 +1,11 @@
-resource "cloudflare_record" "proton_mx_20" {
+resource "cloudflare_record" "records" {
   zone_id = var.cloudflare_zone_id
-  name    = "backman.fyi"
-  value   = "mailsec.protonmail.ch"
-  type    = "MX"
-  priority = "20"
-}
 
-resource "cloudflare_record" "proton_mx_10" {
-  zone_id = var.cloudflare_zone_id
-  name    = "backman.fyi"
-  value   = "mail.protonmail.ch"
-  type    = "MX"
-  priority = "10"
-}
+  name = lookup(var.proton_records[count.index], "key", null) == null ? var.domain_name : join(".", [var.proton_records[count.index].key, var.domain_name])
 
-resource "cloudflare_record" "proton_spf" {
-  zone_id = var.cloudflare_zone_id
-  name    = "backman.fyi"
-  value   = var.spf_record
-  type    = "TXT"
-}
+  value    = var.proton_records[count.index].value
+  type     = var.proton_records[count.index].type
+  priority = var.proton_records[count.index].priority
 
-resource "cloudflare_record" "proton_dkim" {
-  zone_id = var.cloudflare_zone_id
-  name    = "protonmail._domainkey"
-  value   = var.dkim_record
-  type    = "TXT"
+  count = length(var.proton_records)
 }

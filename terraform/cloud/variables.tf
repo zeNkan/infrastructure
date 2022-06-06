@@ -25,14 +25,9 @@ variable "aws_private_subnets" {
 }
 
 # PROTON MAIL
-variable "proton_spf" {
-  description = "Protonmail SPF record"
-  type        = string
-}
-
-variable "proton_dkim" {
-  description = "Protonmail DKIM record"
-  type        = string
+variable "proton_records" {
+  description = "Protonmail DNS records for cloudflare"
+  type        = list(map(string))
 }
 
 
