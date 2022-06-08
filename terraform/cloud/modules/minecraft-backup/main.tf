@@ -1,14 +1,14 @@
 # MINECRAFT SETUP
 resource "aws_s3_bucket" "mc_backup" {
   bucket = "lanbros-mc-backup"
-  acl    = "private"
+  acl    = "public-read"
 
   lifecycle_rule {
     id      = "mc_backup_expiration"
     enabled = true
 
     expiration {
-      days = "7"
+      days = "90"
     }
   }
 }
