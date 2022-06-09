@@ -36,7 +36,6 @@ build {
       "--extra-vars 'rcon=${var.minecraft_rcon}'", 
       "--extra-vars 'rcon_port=${var.minecraft_rcon_port}'",
       "--extra-vars 'jvm_ram=10G'",
-      "--extra-vars 'webhook_id=${var.webhook_id}'",
       "--extra-vars 'webhook_secret=${var.webhook_secret}'"
     ]
     galaxy_file = "../../ansible/requirements.yml"
