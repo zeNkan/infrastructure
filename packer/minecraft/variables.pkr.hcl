@@ -31,10 +31,6 @@ variable "minecraft_rcon_port" {
   type    = string
 }
 
-variable "webhook_id" {
-  type    = string
-}
-
 variable "webhook_secret" {
   type    = string
 }
