@@ -1,11 +1,3 @@
-variable "packer_ESXI_USERNAME" {
-  type = string
-}
-
-variable "packer_ESXI_PASSWORD" {
-  type = string
-}
-
 terraform {
   required_version = ">= 0.13"
   required_providers {
@@ -20,38 +12,29 @@ terraform {
 }
 
 provider "esxi" {
-  esxi_hostname = "esxi1.lan.backman.fyi"
-  esxi_hostport = "22"
-  esxi_hostssl  = "443"
-  esxi_username = var.packer_ESXI_USERNAME
-  esxi_password = var.packer_ESXI_PASSWORD
+  esxi_hostname = var.esxi_hostname
+  esxi_hostport = var.esxi_ssh_port
+  esxi_hostssl  = var.esxi_ssl_port
+  esxi_username = var.esxi_username
+  esxi_password = var.esxi_password
 }
 
-resource "esxi_guest" "lanbros-survival" {
-  guest_name = "lanbros-survival"
-  disk_store = "datastore1"
-  ovf_source = "../../packer/minecraft/output-baseline/minecraft.ovf"
-  guestos = "centos9"
+resource "esxi_guest" "lanbros_minecraft_119" {
+  guest_name = var.mc_server_name
+  disk_store = var.esxi_datastore
+  ovf_source = var.mc_server_ovf_path
 
   memsize  = "12288"
   numvcpus = "4"
 
   network_interfaces {
     virtual_network = "VM Network"
-    mac_address = "E8:49:9B:6C:A2:50"
+    mac_address = var.mc_server_mac
   }
-}
 
-resource "esxi_guest" "vmtest" {
-  guest_name = "terraform_test"
-  disk_store = "datastore1"
-  ovf_source = "../../packer/minecraft/output-baseline/minecraft.ovf"
-
-  memsize  = "12288"
-  numvcpus = "4"
-
-  network_interfaces {
-    virtual_network = "VM Network"
+  guestinfo = {
+    "metadata.encoding" = "gzip+base64"
+    "metadata" = base64gzip(jsonencode({"local-hostname" = var.mc_server_name}))
   }
 }
 
