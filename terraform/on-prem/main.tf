@@ -29,12 +29,12 @@ resource "esxi_guest" "lanbros_minecraft_119" {
 
   network_interfaces {
     virtual_network = "VM Network"
-    mac_address = var.mc_server_mac
+    mac_address     = var.mc_server_mac
   }
 
   guestinfo = {
     "metadata.encoding" = "gzip+base64"
-    "metadata" = base64gzip(jsonencode({"local-hostname" = var.mc_server_name}))
+    "metadata"          = base64gzip(jsonencode({ "local-hostname" = var.mc_server_name }))
   }
 }
 

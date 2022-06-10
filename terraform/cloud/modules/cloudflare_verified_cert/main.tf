@@ -21,12 +21,12 @@ resource "cloudflare_record" "cert_verification" {
     }
   }
 
-  zone_id         = data.cloudflare_zones.backman.zones[0].id
-  name            = each.value.name
-  value           = trimsuffix(each.value.record, ".")
-  type            = each.value.type
-  ttl             = 1
-  proxied         = false
+  zone_id = data.cloudflare_zones.backman.zones[0].id
+  name    = each.value.name
+  value   = trimsuffix(each.value.record, ".")
+  type    = each.value.type
+  ttl     = 1
+  proxied = false
 }
 
 resource "aws_acm_certificate_validation" "CF_verified" {
