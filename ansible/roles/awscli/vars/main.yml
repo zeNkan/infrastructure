@@ -1,6 +1,0 @@
----
-aws_system_user: minecraft
-aws_profile: default
-aws_access_key: "AKIA2O3FCHJD2RNUHD4M"
-aws_secret_key: "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"
-aws_format: json
